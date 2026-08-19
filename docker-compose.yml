@@ -1,0 +1,33 @@
+services:
+  postgres_db:
+    image: postgres:17
+    container_name: postgres_db
+    environment:
+      - POSTGRES_USER=USER
+      - POSTGRES_PASSWORD=PASS
+      - POSTGRES_DB=DB
+    ports:
+      - "54432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U USER -d DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # application:
+  #   build: .
+  #   container_name: application_container
+  #   #ports:
+  #    # - "PORT:PORT"
+  #   environment:
+  #       - DATABASE_URL=postgresql://USER:PASS@postgres_db/DB
+  #   depends_on:
+  #     postgres_db:
+  #       condition: service_healthy
+
+volumes:
+  postgres_data:
+
+  
