@@ -21,9 +21,13 @@ jobs:
          git fetch origin 
          COMMENT=$(git diff origin/main..HEAD)
 
-         echo "comment<<$delim" >> $GITHUB_OUTPUT
-         echo $COMMENT >> $GITHUB_OUTPUT
-         echo "$delim" >> $GITHUB_OUTPUT
+         {
+          echo "comment<<$delim" 
+          echo '```diff'
+          echo $COMMENT 
+          echo '```'
+          echo "$delim" 
+         } >> $GITHUB_OUTPUT
 
       - name: commenting
         # run: |
@@ -35,7 +39,5 @@ jobs:
           token: ${{ github.token }}
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Changed Files are
-            ```diff 
+            Changed Files are:
             ${{ steps.show_changes.outputs.comment }}
-            ```
