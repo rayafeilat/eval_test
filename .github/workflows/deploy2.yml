@@ -17,6 +17,7 @@ jobs:
         id: show_changes
         run: |
          echo "comment=$(git main..HEAD)" >> "$GITHUB_OUTPUT"
+         echo $comment
 
       - name: commenting
         run: |
