@@ -32,7 +32,7 @@ jobs:
         #   GH_TOKEN: ${{ github.token }}
         uses: peter-evans/create-or-update-comment@v2
         with:
-          token: ${{ githib.token }}
+          token: ${{ github.token }}
           issue-number: ${{ github.event.pull_request.number }}
           body: ${{ steps.show_changes.outputs.comment }}
         
