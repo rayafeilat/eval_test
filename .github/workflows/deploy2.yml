@@ -16,19 +16,16 @@ jobs:
       - name: pull request
         id: show_changes
         run: |
+         delim=EOF_$(openssl rand -hex 8)
          git fetch origin 
          COMMENT=$(git diff origin/main..HEAD)
-         echo "comment<<EOF" >> $GITHUB_OUTPUT
+         echo "comment<<$delim" >> $GITHUB_OUTPUT
          echo $COMMENT >> $GITHUB_OUTPUT
-         echo "EOF" >> $GITHUB_OUTPUT
+         echo "$delim" >> $GITHUB_OUTPUT
 
       - name: commenting
         run: |
-          COMMENT=$(cat << 'EOF'
-          changed files are ${{ steps.show_changes.outputs.comment }}'
-          EOF
-          )
-          gh pr comment ${{ github.event.pull_request.number }} --body $COMMENT
+          gh pr comment ${{ github.event.pull_request.number }} --body 'Changed files are ${{ steps.show_changes.outputs.coment }}'
         env:
           GH_TOKEN: ${{ github.token }}
         
