@@ -21,7 +21,7 @@ jobs:
         run: |
           gh pr comment ${{ github.event.pull_request.number }} --body "changed files are ${{steps.show_changes.outputs.comment}}"
         env:
-          GH_TOKEN: ${{ secrets.EVAL_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
 
 
         
