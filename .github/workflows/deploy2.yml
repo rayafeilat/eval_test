@@ -19,12 +19,10 @@ jobs:
          delim=EOF_$(openssl rand -hex 8)
 
          git fetch origin 
-         COMMENT=$(git diff origin/main..HEAD)
-
          {
           echo "comment<<$delim" 
           echo '```diff'
-          echo $COMMENT 
+          git diff origin/main..HEAD
           echo '```'
           echo "$delim" 
          } >> $GITHUB_OUTPUT
