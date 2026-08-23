@@ -18,7 +18,6 @@ jobs:
         run: |
          git fetch origin 
          echo "comment=$(git diff origin/main..HEAD)" >> "$GITHUB_OUTPUT"
-         echo $comment
 
       - name: commenting
         run: |
