@@ -1,0 +1,24 @@
+name: evaluation pipeline part 2
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  update application:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: pull request
+        id: show_changes
+        run: |
+         echo "comment=$(git main..HEAD )" >> "$GITHUB_OUTPUT"
+
+      - name: commenting
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body "changed files are ${{steps.show_changes.outputs.comment}}"
+          
+
+
+        

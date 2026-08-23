@@ -16,16 +16,16 @@ services:
       timeout: 5s
       retries: 3
 
-  # application:
-  #   build: .
-  #   container_name: application_container
-  #   #ports:
-  #    # - "PORT:PORT"
-  #   environment:
-  #       - DATABASE_URL=postgresql://USER:PASS@postgres_db/DB
-  #   depends_on:
-  #     postgres_db:
-  #       condition: service_healthy
+  application:
+    build: .
+    container_name: application_container
+    environment:
+      - DB_CONN=Host=postgres_db;Port=5432;Database=DB;Username=USER;Password=PASS;
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres_db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
