@@ -34,5 +34,8 @@ jobs:
         with:
           token: ${{ github.token }}
           issue-number: ${{ github.event.pull_request.number }}
-          body: ${{ steps.show_changes.outputs.comment }}
-        
+          body: |
+            Changed Files are
+            ```diff 
+            ${{ steps.show_changes.outputs.comment }}
+            ```
