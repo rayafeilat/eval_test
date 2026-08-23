@@ -16,7 +16,7 @@ jobs:
       - name: pull request
         id: show_changes
         run: |
-         echo "comment=$(git main..HEAD )" >> "$GITHUB_OUTPUT"
+         echo "comment=$(git main..HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: commenting
         run: |
