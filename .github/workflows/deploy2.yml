@@ -24,9 +24,10 @@ jobs:
 
       - name: commenting
         run: |
-          COMMENT = <<'EOF'
+          COMMENT=$(cat << 'EOF'
           changed files are ${{ steps.show_changes.outputs.comment }}'
           EOF
+          )
           gh pr comment ${{ github.event.pull_request.number }} --body $COMMENT
         env:
           GH_TOKEN: ${{ github.token }}
