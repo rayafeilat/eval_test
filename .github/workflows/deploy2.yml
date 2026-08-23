@@ -3,9 +3,12 @@ on:
   pull_request:
     branches:
       - main
+permissions:
 jobs:
   commenting-changed-files:
     runs-on: self-hosted
+    permissions:
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
