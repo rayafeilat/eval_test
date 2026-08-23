@@ -20,7 +20,8 @@ jobs:
 
       - name: commenting
         run: |
-          gh pr comment ${{ github.event.pull_request.number }} --body "${{ steps.show_changes.outputs.comment }}"
+          gh pr comment ${{ github.event.pull_request.number }} --body "changed files are ${{ steps.show_changes.outputs.comment }}"
+          
 
         env:
           GH_TOKEN: ${{ github.token }}
