@@ -24,7 +24,9 @@ jobs:
 
       - name: commenting
         run: |
-          gh pr comment ${{ github.event.pull_request.number }} --body 'changed files are ${{ steps.show_changes.outputs.comment }}'
+          gh pr comment ${{ github.event.pull_request.number }} --body <<'EOF'
+          changed files are ${{ steps.show_changes.outputs.comment }}'
+          EOF
         env:
           GH_TOKEN: ${{ github.token }}
         
