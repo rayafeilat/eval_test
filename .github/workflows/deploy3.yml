@@ -36,5 +36,6 @@ jobs:
         continue-on-error: true
 
       - name: applying
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
 
