@@ -28,10 +28,10 @@ jobs:
         run: terraform fmt -check
 
       - name: initializing
-        run: terraform initi
+        run: terraform init
 
       - name: planning
-        if : github.event_name== 'pull_request'
+        if : github.event_name == 'pull_request'
         run: terraform plan
         continue-on-error: true
 
