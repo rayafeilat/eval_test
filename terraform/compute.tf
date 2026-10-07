@@ -11,5 +11,6 @@ module "compute" {
   boot_disk_size        = each.value.boot_disk_size
   boot_disk_type        = each.value.boot_disk_type
   image                 = var.ami
+  tags                  = each.value.tags
 }
 

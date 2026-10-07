@@ -20,7 +20,6 @@ variable "VM_specs" {
     name                  = string
     network_ip            = string
     machine_type          = string
-    Disk                  = string
     tags                  = list(string)
     service_account_email = string
     boot_disk_size        = number
