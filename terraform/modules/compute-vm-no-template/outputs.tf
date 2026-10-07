@@ -20,26 +20,26 @@ output "instance_status" {
 
 output "id" {
   description = "ID Of Instance"
-  value = google_compute_instance.default.id
+  value       = google_compute_instance.default.id
 }
 
 output "internal_ip" {
   description = "Internal IP Of Instance"
-  value = google_compute_instance.default.network_interface.0.network_ip
+  value       = google_compute_instance.default.network_interface.0.network_ip
 }
 
 output "attached_disks_ids" {
   description = "ID of the created disk."
-  value       = [ for d in values(google_compute_disk.disk) : d.id ] 
+  value       = [for d in values(google_compute_disk.disk) : d.id]
 }
 
 output "attached_disks_self_links" {
   description = "Self-link of the created disk."
-  value       = [ for d in values(google_compute_disk.disk) : d.self_link ]
+  value       = [for d in values(google_compute_disk.disk) : d.self_link]
 }
 
 output "attached_disks_names" {
   description = "Self-link of the created disk."
-  value       = [ for d in values(google_compute_disk.disk) : basename(d.name) ]
+  value       = [for d in values(google_compute_disk.disk) : basename(d.name)]
 }
 

@@ -68,27 +68,27 @@ variable "image" {
 variable "additional_disks" {
   description = "Additional disks to attach to the instance"
   type = list(object({
-    description                     = optional(string)
-    type                            = string
-    size                            = number
-    disk_encryption_key_raw         = optional(string)
-    image                           = optional(string)
-    snapshot                        = optional(string)
-    physical_block_size_bytes       = optional(number)
-    kms_key_self_link               = optional(string)
-    mode                            = optional(string, "READ_WRITE")
-    disk_encryption_key             = optional(object({
+    description               = optional(string)
+    type                      = string
+    size                      = number
+    disk_encryption_key_raw   = optional(string)
+    image                     = optional(string)
+    snapshot                  = optional(string)
+    physical_block_size_bytes = optional(number)
+    kms_key_self_link         = optional(string)
+    mode                      = optional(string, "READ_WRITE")
+    disk_encryption_key = optional(object({
       raw_key           = string
       kms_key_self_link = optional(string)
     }))
-    source_image_encryption_key     = optional(object({
+    source_image_encryption_key = optional(object({
       raw_key = string
     }))
-    source_snapshot_encryption_key  = optional(object({
+    source_snapshot_encryption_key = optional(object({
       raw_key = string
     }))
   }))
-  default     = []
+  default = []
 }
 
 variable "network" {
@@ -104,11 +104,11 @@ variable "subnetwork" {
 
 variable "access_config" {
   description = "The external IP address to assign"
-  type        = list(object({
-    nat_ip                  = optional(string)
-    network_tier            = optional(string)
+  type = list(object({
+    nat_ip       = optional(string)
+    network_tier = optional(string)
   }))
-  default     = []
+  default = []
 }
 
 variable "network_ip" {
@@ -172,24 +172,24 @@ variable "enable_integrity_monitoring" {
 
 variable "deletion_protection" {
   description = "Wether This VM should be protected against deletion or not"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "enable_display" {
   description = "Wether to enable a display for this VM or not"
-  type = bool
-  default = false
+  type        = bool
+  default     = false
 }
 
 variable "key_revocation_action_type" {
   description = "Action to be taken when a customer's encryption key is revoked. Supports 'STOP' and 'NONE', with 'NONE' being the default."
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
 
 variable "boot_disk_source" {
   description = "The name or self_link of the disk attached to this instance."
-  type = string
-  default = null
+  type        = string
+  default     = null
 }
