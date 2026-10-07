@@ -8,7 +8,8 @@ module "compute" {
   zone                  = var.zone
   service_account_email = each.value.service_account_email
   machine_type          = each.value.machine_type
-
-  image = var.ami
+  boot_disk_size        = each.value.boot_disk_size
+  boot_disk_type        = each.value.boot_disk_type
+  image                 = var.ami
 }
 

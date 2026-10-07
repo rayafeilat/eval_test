@@ -21,8 +21,11 @@ variable "VM_specs" {
     network_ip            = string
     machine_type          = string
     Disk                  = string
-    tags                  = string
+    tags                  = list(string)
     service_account_email = string
+    boot_disk_size        = number
+    boot_disk_type        = number
+
   }))
 }
 
@@ -50,4 +53,4 @@ variable "ami" {
   description = "the image that the instance will be build through"
   default     = "ubuntu"
 }
-
+# new here ...
