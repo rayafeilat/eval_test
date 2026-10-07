@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   update-application:
-    runs-on: self-hosted
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
