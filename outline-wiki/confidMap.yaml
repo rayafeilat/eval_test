@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: outline-config
+  namespace: outline-wiki
+data:
+  URL: http://localhost:30080
+  PORT: "3000"
+  REDIS_URL: redis://redis:3679
+  PGSSLMODE: disable
+  FILE_STORAGE: local
+  FILE_STORAGE_LOCAL_ROOT_DIR: /var/lib/outline/data
+  FILE_STORAGE_UPLOAD_MAX_SIZE: "26214400"
+  FORCE_HTTPS: "false"
+
