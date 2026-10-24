@@ -4,7 +4,7 @@ metadata:
   name: postgres-statefulset
   namespace: outline-wiki
 spec:
-  serviceName: postgres
+  serviceName: postgres-service
   replicas: 1
   selector:
     matchLabels:

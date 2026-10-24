@@ -14,22 +14,24 @@ spec:
         app: outline
     spec:
       containers:
-      - name: outline
-        image: outlinewiki/outline:latest
-        ports:
-        - containerPort: 3000
-        envFrom:
-        - configMapRef:
-            name: outline-config
-        volumeMounts:
-        - name: data
-          mountPath: /var/lib/outline/data
-        readinessProbe:
+       - name: outline
+         image: outlinewiki/outline:latest
+         ports:
+         - containerPort: 3000
+         envFrom:
+         - configMapRef:
+             name: outline-config
+         - secretRef:
+            name: outline-secret
+         volumeMounts:
+         - name: data
+           mountPath: /var/lib/outline/data
+         readinessProbe:
           httpGet:
             path: /_health
             port: 3000
           initialDelaySeconds: 15
-          periodSeconds: 10
+          periodSeconds: 15
       volumes:
       - name: data
         persistentVolumeClaim:

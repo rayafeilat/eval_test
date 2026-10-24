@@ -6,7 +6,7 @@ metadata:
 data:
   URL: http://localhost:30080
   PORT: "3000"
-  REDIS_URL: redis://redis:3679
+  REDIS_URL: redis://redis-service:6379
   PGSSLMODE: disable
   FILE_STORAGE: local
   FILE_STORAGE_LOCAL_ROOT_DIR: /var/lib/outline/data
