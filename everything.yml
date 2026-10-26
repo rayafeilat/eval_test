@@ -8,6 +8,7 @@ stringData:
   POSTGRES_USER: user
   POSTGRES_PASSWORD: pass
   POSTGRES_DB: outline
+  PGSSLMODE: disable
 
 ---
 apiVersion: v1
@@ -50,14 +51,13 @@ spec:
             name: postgres-secret
         volumeMounts:
         - name: postgres-volume
-          mountPath: /var/lib/postgresql/data
+          mountPath: /var/lib/postgresql
   volumeClaimTemplates:
   - metadata:
       name: postgres-volume
     spec:
       accessModes:
         - ReadWriteOnce
-      storageClassName: data
       resources:
         requests:
           storage: 5Gi
@@ -105,9 +105,9 @@ metadata:
   name: configmap-outline
   namespace: outline-wiki
 data:
-  URL: http://localhost:3000
+  URL: http://localhost:30080
   REDIS_URL: http://redis-service:6379
-  COLLABORATION_URL: http://localhost:3000
+  COLLABORATION_URL: http://localhost:30080
 
 ---
 
