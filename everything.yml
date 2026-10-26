@@ -32,35 +32,35 @@ spec:
   selector:
     matchLabels:
       app: postgres
-    serviceName: postgres-service
-    replicas: 1
-    template:
-      metadata:
-        labels:
-          app: postgres-service
-      spec:
-        containers:
-        - name: postgres
-          image: postgres:latest
-          ports:
-          - containerPort: 5432
-            name: postgres
-          envFrom:
-          - secretRef:
-              name: postgres-secret
-          volumeMounts:
-          - name: postgres-volume
-            mountPath: /var/lib/postgresql/data
-volumeClaimTemplates:
-- metadata:
-    name: postgres-volume
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    storageClassName: data
-    resources:
-      requests:
-        storage: 5Gi
+  serviceName: postgres-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres-service
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+          name: postgres
+        envFrom:
+        - secretRef:
+            name: postgres-secret
+        volumeMounts:
+        - name: postgres-volume
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-volume
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: data
+      resources:
+        requests:
+          storage: 5Gi
 
 ---
 apiVersion: v1
@@ -92,11 +92,11 @@ spec:
       labels:
         app: outline
     spec:
-      conatiners:
+      containers:
       - name: redis
         image: redis:latest # i shall check this image later
         ports:
-        - container: 6379
+        - containerPort: 6379
         
 ---
 apiVersion: v1
@@ -109,7 +109,7 @@ data:
    
 
 ---
-piVersion: v1
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: configmap-redis
@@ -174,7 +174,7 @@ spec:
       labels:
         app: outline
     spec:
-      conatiners:
+      containers:
       - name: outline
         image: outlinewiki/outline:latest
         ports:
