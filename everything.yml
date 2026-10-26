@@ -1,0 +1,188 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: outline-wiki
+type: opaque
+stringData:
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: pass
+  POSTGRES_DB: outline
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: outline-wiki
+spec:
+  selector:
+    app: postgres
+  ports:
+    port: 5432
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+    serviceName: postgres-service
+    replicas: 1
+    template:
+      metadata:
+        labels:
+          app: postgres-service
+      spec:
+        containers:
+        - name: postgres
+          image: postgres:latest
+          ports:
+          - containerPort: 5432
+            name: postgres
+          envFrom:
+          - secretRef:
+              name: postgres-secret
+          volumeMounts:
+          - name: postgres-volume
+            mountPath: /var/lib/postgresql/data
+volumeClaimTemplates:
+- metadata:
+    name: data
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    storageClassName: data
+    resources:
+      requests:
+        storage: 5Gi
+
+---
+apiVersion: v1
+kind: service
+metadata:
+  name: redis-service
+  namespace: outline-wiki
+spec:
+  selector:
+    name: redis # i might return here to edit this
+  ports:
+    - port: 6379
+      targetPort: 6379
+  
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: outline-wiki
+spec:
+  serviceName: redis-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      conatiners:
+      - name: redis
+        image: redis:latest # i shall check this image later
+        ports:
+        - container: 6379
+        
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap
+  namespace: outline-wiki
+data:
+URL: http//localhost:3000
+redis_URL: http://redis-service:6379
+STORAGE: /var/lib/postgresql/data # get back to this key migh be wrong 
+
+---
+apiVersion: v1
+kind: service
+metadata:
+  name: nodeport
+  namespace: outline-wiki
+spec:
+  type: NodePort
+  selector:
+    app: outline
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080 # chose this so i will continue with it 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: outline-secret
+  namespace: outline-wiki
+type: Opaque
+stringData:
+  SECRET_KEY: 81cb15346b1ebd583ec565c5f391724b6929a75d6ea36ae4fc7b351e891ee8a9
+  UTILS_KEY: 4b239e7866c9cedef8e0c6d64b538a04a81c3fe59a4da473c4d7e4d884c2a202
+  DATABASE_URL: postgresql://user:pass@postgres:5432/outline
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: outline-data
+  namespace: outline-wiki
+spec: 
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  selector:
+    app: outline
+
+      #here might add addtional keys not sure depends on the error
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: outline-deployment
+  namespace: outline-wiki
+spec:
+  replicas: 1
+  selector:
+    app: outline
+  template:
+    spec:
+      conatiners:
+      - name: outline
+        image: outlinewiki/outline:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef: 
+            name: configmap
+        - secretRef:
+            name: outline-secret
+        volumesMounts:
+          - name: data
+            mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: outline-data
+
+
+
+
+
+
+
