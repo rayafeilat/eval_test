@@ -37,7 +37,7 @@ spec:
   template:
     metadata:
       labels:
-        app: postgres-service
+        app: postgres
     spec:
       containers:
       - name: postgres
@@ -90,7 +90,7 @@ spec:
   template:
     metadata:
       labels:
-        app: outline
+        app: redis
     spec:
       containers:
       - name: redis
@@ -144,7 +144,7 @@ stringData:
   DATABASE_URL: postgresql://user:pass@postgres-service:5432/outline
 ---
 apiVersion: v1
-kind: persistentVolumeClaim
+kind: PersistentVolumeClaim
 metadata:
   name: outline-data
   namespace: outline-wiki
@@ -154,9 +154,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  selector:
-    app: outline
-
+  
       
 ---
 apiVersion: apps/v1
@@ -181,10 +179,10 @@ spec:
         - containerPort: 3000
         envFrom:
         - configMapRef: 
-            name: configmap
+            name: configmap-outline
         - secretRef:
             name: outline-secret
-        volumesMounts:
+        volumeMounts:
           - name: data
             mountPath: /var/lib/postgresql/data
       volumes:
