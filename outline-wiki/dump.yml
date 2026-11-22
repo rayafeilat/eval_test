@@ -1,0 +1,87 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: postgres-dump
+  namespace: outline-wiki
+spec:
+  #backoffLimits: 5
+  #activeDeadlineSeconds: 100
+  #ttlSecondsAfterFinished: 60
+  
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: postgres-dump
+          image: postgres:latest
+          command: ["/bin/sh","-c"]
+          args:
+            [
+                'pg_dump -U $POSTGRES_USER -h postgres-service -p 5432 -d $POSTGRES_DB | gzip > /var/lib/postgresql/outline.sql.gz'
+            ] # might edit path >> add 
+          volumeMounts:
+            - name: postgres-backup
+              mountPath: /var/lib/postgresql
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          envFrom:
+            - secretRef:
+                name: postgres-secret 
+          
+#POSTGRES_PASSWORD flag it 
+
+      volumes:
+        - name: postgres-backup
+          persistentVolumeClaim:
+            claimName: postgres-backup
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-dump-daily
+  namespace: outline-wiki
+spec:
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: postgres-dump
+              image: postgres:latest
+              command: ["/bin/sh","-c"]
+              args:
+                [
+                    'pg_dump -U user -h postgres-service -p 5432 -d outline | gzip > /var/lib/postgresql/outline-$(date +%F).sql.gz'
+                ] 
+              volumeMounts:
+                - name: postgres-backup
+                  mountPath: /var/lib/postgresql
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: POSTGRES_PASSWORD
+          volumes:
+            - name: postgres-backup
+              persistentVolumeClaim:
+                claimName: postgres-backup
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-backup
+  namespace: outline-wiki
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
